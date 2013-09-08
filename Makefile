@@ -3,7 +3,8 @@
 all:
 	$(MAKE) -C lib
 
-test:
+test: all
+	$(MAKE) -C tests test
 	$(MAKE) -C lib test
 
 clean:
