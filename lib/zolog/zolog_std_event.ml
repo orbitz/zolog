@@ -53,14 +53,26 @@ type t = { name   : string list
 type 'a event =
     ?extra:(string * string) list ->
     ?time:Time.t ->
+    ?h:string ->
     n:string list ->
-    h:string ->
     o:string ->
     'a
 
-let log ?(extra = []) ?(time = Time.now ()) ~n ~h ~o ~l msg =
-  failwith "nyi"
+let log ?(extra = []) ?(time = Time.now ()) ?(h = "nohostname") ~n ~o ~l msg =
+  { extra
+  ; time
+  ; name   = n
+  ; host   = h
+  ; origin = o
+  ; event  = Event.Log { Log.level = l; short_msg = msg }
+  }
 
-let metric ?(extra = []) ?(time = Time.now ()) ~n ~h ~o m =
-  failwith "nyi"
+let metric ?(extra = []) ?(time = Time.now ()) ?(h = "nohostname") ~n ~o m =
+  { extra
+  ; time
+  ; name   = n
+  ; host   = h
+  ; origin = o
+  ; event  = Event.Metric m
+  }
 

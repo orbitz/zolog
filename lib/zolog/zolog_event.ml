@@ -1,12 +1,14 @@
 open Core.Std
 open Async.Std
 
+let hostname = Async_unix.Unix_syscalls.gethostname ()
+
 type std_server = Zolog_std_event.t Zolog.t
 
 type no_level =
     (std_server -> string -> unit Deferred.t) Zolog_std_event.event
 
-let debug ?(extra = []) ?(time = Time.now ()) ~n ~h ~o server msg =
+let debug ?(extra = []) ?(time = Time.now ()) ?(h = hostname) ~n ~o server msg =
   let event =
     Zolog_std_event.log
       ~extra
@@ -19,7 +21,7 @@ let debug ?(extra = []) ?(time = Time.now ()) ~n ~h ~o server msg =
   in
   Zolog.publish server event
 
-let info ?(extra = []) ?(time = Time.now ()) ~n ~h ~o server msg =
+let info ?(extra = []) ?(time = Time.now ())  ?(h = hostname) ~n ~o server msg =
   let event =
     Zolog_std_event.log
       ~extra
@@ -32,7 +34,7 @@ let info ?(extra = []) ?(time = Time.now ()) ~n ~h ~o server msg =
   in
   Zolog.publish server event
 
-let warning ?(extra = []) ?(time = Time.now ()) ~n ~h ~o server msg =
+let warning ?(extra = []) ?(time = Time.now ())  ?(h = hostname) ~n ~o server msg =
   let event =
     Zolog_std_event.log
       ~extra
@@ -45,7 +47,7 @@ let warning ?(extra = []) ?(time = Time.now ()) ~n ~h ~o server msg =
   in
   Zolog.publish server event
 
-let error ?(extra = []) ?(time = Time.now ()) ~n ~h ~o server msg =
+let error ?(extra = []) ?(time = Time.now ())  ?(h = hostname) ~n ~o server msg =
   let event =
     Zolog_std_event.log
       ~extra
@@ -58,7 +60,7 @@ let error ?(extra = []) ?(time = Time.now ()) ~n ~h ~o server msg =
   in
   Zolog.publish server event
 
-let critical ?(extra = []) ?(time = Time.now ()) ~n ~h ~o server msg =
+let critical ?(extra = []) ?(time = Time.now ())  ?(h = hostname) ~n ~o server msg =
   let event =
     Zolog_std_event.log
       ~extra
@@ -71,7 +73,7 @@ let critical ?(extra = []) ?(time = Time.now ()) ~n ~h ~o server msg =
   in
   Zolog.publish server event
 
-let counter ?(extra = []) ?(time = Time.now ()) ~n ~h ~o server c =
+let counter ?(extra = []) ?(time = Time.now ())  ?(h = hostname) ~n ~o server c =
   let event =
     Zolog_std_event.metric
       ~extra
@@ -83,7 +85,7 @@ let counter ?(extra = []) ?(time = Time.now ()) ~n ~h ~o server c =
   in
   Zolog.publish server event
 
-let time ?(extra = []) ?(time = Time.now ()) ~n ~h ~o server f =
+let time ?(extra = []) ?(time = Time.now ())  ?(h = hostname) ~n ~o server f =
   let open Deferred.Monad_infix in
   let start = Time.now () in
   f () >>= fun r ->

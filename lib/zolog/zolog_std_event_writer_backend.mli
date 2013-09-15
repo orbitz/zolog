@@ -7,8 +7,9 @@ module Formatter : sig
 end
 
 module Rotator : sig
-  type force_open = Zolog_std_event.Log.level -> Writer.t Deferred.t
-  type maybe_open = Zolog_std_event.Log.level -> Writer.t option Deferred.t
+  type level      = Zolog_std_event.Log.level
+  type force_open = unit -> (level * Writer.t) list Deferred.t
+  type maybe_open = unit -> (level * Writer.t) list option Deferred.t
   type t          = { force_open : force_open
   		    ; maybe_open : maybe_open
   		    }
@@ -21,4 +22,20 @@ val create  :
 val handler : t -> Zolog_std_event.t Zolog.Handler.t
 val destroy : t -> unit Deferred.t
 
-val default_formatter : ?max_level:Zolog_std_event.Log.level -> Formatter.t
+(* Formatter *)
+val default_formatter :
+  ?min_level:Zolog_std_event.Log.level ->
+  ?max_level:Zolog_std_event.Log.level ->
+  Formatter.t
+
+(* Rotator *)
+val stderr_rotator    : Rotator.t
+val writer_rotator    : Writer.t -> Rotator.t
+
+(* Helpful transformers *)
+(*
+ * Takes output of a formatter and changes the log level to
+ * Debug so it will be printed on all output
+ *)
+val funnel            : Formatter.t -> Formatter.t
+

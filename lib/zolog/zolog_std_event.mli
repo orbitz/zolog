@@ -40,8 +40,8 @@ type t = { name   : string list
 type 'a event =
     ?extra:(string * string) list ->
     ?time:Time.t ->
+    ?h:string ->
     n:string list ->
-    h:string ->
     o:string ->
     'a
 
