@@ -17,6 +17,23 @@ module Log = struct
   type t = { short_msg : string
 	   ; level     : level
 	   }
+
+  let int_of_level = function
+    | Debug    -> 0
+    | Info     -> 1
+    | Warning  -> 2
+    | Error    -> 3
+    | Critical -> 4
+
+  let compare l r =
+    Int.compare (int_of_level l) (int_of_level r)
+
+  let string_of_level = function
+    | Debug    -> "debug"
+    | Info     -> "info"
+    | Warning  -> "warning"
+    | Error    -> "error"
+    | Critical -> "critical"
 end
 
 module Event = struct

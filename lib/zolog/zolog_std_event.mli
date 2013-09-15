@@ -17,6 +17,10 @@ module Log : sig
   type t = { short_msg : string
 	   ; level     : level
 	   }
+
+  val compare         : level -> level -> int
+  val int_of_level    : level -> int
+  val string_of_level : level -> string
 end
 
 module Event : sig
