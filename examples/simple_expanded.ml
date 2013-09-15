@@ -1,3 +1,6 @@
+(*
+ * This expands out the setup portion to show what can be done
+ *)
 open Core.Std
 open Async.Std
 
@@ -5,11 +8,22 @@ let main () =
   let open Deferred.Monad_infix in
   let logger = Zolog.start () in
 
-  Zolog_std_event_console_backend.create
+  (* Create a default formatter *)
+  let formatter =
     Zolog_std_event_writer_backend.default_formatter
+  in
+
+  (*
+   * Create a backend and funnel all messages to Debug
+   * and use the stderr rotator, which doesn't rotate
+   * anything and it only createsa debug level writer
+   *)
+  Zolog_std_event_writer_backend.create
+    (Zolog_std_event_writer_backend.funnel formatter)
+    Zolog_std_event_writer_backend.stderr_rotator
   >>= fun backend ->
 
-  let handler = Zolog_std_event_console_backend.handler backend in
+  let handler = Zolog_std_event_writer_backend.handler backend in
   Zolog.add_handler logger handler >>= fun id ->
   (* Log a debug statement *)
   Zolog_event.debug
@@ -42,8 +56,12 @@ let main () =
   Zolog.sync logger
   >>= fun () ->
   Zolog.stop logger;
-  Zolog_std_event_console_backend.destroy backend
-  >>= fun() ->
+  (*
+   * Don't call the destroy on this.  The writer destroyer will close
+   * the writers and we don't want to close stderr.  The console backend
+   * destroy handles this properly
+   *)
+  (* Zolog_std_event_writer_backend.destroy backend *)
   Deferred.return (shutdown 0)
 
 

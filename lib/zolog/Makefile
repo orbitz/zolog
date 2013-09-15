@@ -2,7 +2,10 @@ CAMLP4=
 OCAMLC_OPTS=-package regen_event,core,async,async_core
 OCAMLOPT_OPTS=$(OCAMLC_OPTS)
 
-LIB_MODULES=zolog.ml zolog_std_event.ml zolog_event.ml zolog_std_event_writer_backend.ml
+LIB_MODULES= \
+	zolog.ml zolog_std_event.ml zolog_event.ml \
+	zolog_std_event_writer_backend.ml zolog_std_event_console_backend.ml
+
 NON_LIB_MODULES=
 
 BYTE_TARGETS=zolog.cma

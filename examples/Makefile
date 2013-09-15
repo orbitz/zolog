@@ -2,7 +2,7 @@ CAMLP4=
 OCAMLC_OPTS=-package regen_event,zolog
 OCAMLOPT_OPTS=$(OCAMLC_OPTS)
 
-NON_LIB_MODULES=simple.ml
+NON_LIB_MODULES=simple.ml simple_expanded.ml
 
 native_bin=$(NON_LIB_MODULES:%.ml=%.native)
 
@@ -16,9 +16,13 @@ native-code: $(native_bin)
 
 simple.native: simple.cmx
 
+simple_expanded.native: simple_expanded.cmx
+
 byte-code: $(byte_bin)
 
 simple.byte: simple.cmo
+
+simple_expanded.byte: simple_expanded.cmo
 
 clean: extra_clean
 
