@@ -1,4 +1,4 @@
-SUBDIRS =
+SUBDIRS = zolog
 
 all_apps = $(SUBDIRS)
 
