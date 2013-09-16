@@ -31,7 +31,7 @@ let maybe_remake_writers t =
       Deferred.unit
 
 let write level str (wlevel, w) =
-  if Zolog_std_event.Log.compare level wlevel <= 0 then
+  if Zolog_std_event.Log.compare wlevel level <= 0 then
     Writer.write w str
 
 let create ~formatter ~rotator =
