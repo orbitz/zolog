@@ -4,7 +4,7 @@ CAMLP4=
 OCAMLC_OPTS=-package regen_event,zolog
 OCAMLOPT_OPTS=$(OCAMLC_OPTS)
 
-NON_LIB_MODULES=simple_test.ml
+NON_LIB_MODULES=zolog_std_event_writer_backend_tests.ml
 
 native_bin=$(NON_LIB_MODULES:%.ml=%.native)
 
@@ -16,14 +16,14 @@ all: native-code byte-code
 
 native-code: $(native_bin)
 
-simple_test.native: simple_test.cmx
+zolog_std_event_writer_backend_tests.native: zolog_std_event_writer_backend_tests.cmx
 
 byte-code: $(byte_bin)
 
-simple_test.byte: simple_test.cmo
+zolog_std_event_writer_backend_tests.byte: zolog_std_event_writer_backend_tests.cmo
 
 test: all
-	./simple_test.native $(RIAK_HOST) $(RIAK_PORT) $(RIAK_BUCKET)
+	./zolog_std_event_writer_backend_tests.native
 
 clean: extra_clean
 
