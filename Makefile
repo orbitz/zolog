@@ -12,4 +12,6 @@ examples: all
 
 clean:
 	$(MAKE) -C lib clean
+	$(MAKE) -C examples clean
+	$(MAKE) -C tests clean
 
