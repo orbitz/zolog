@@ -4,7 +4,8 @@ OCAMLOPT_OPTS=$(OCAMLC_OPTS)
 
 LIB_MODULES= \
 	zolog.ml zolog_std_event.ml zolog_event.ml \
-	zolog_std_event_writer_backend.ml zolog_std_event_console_backend.ml
+	zolog_std_event_writer_backend.ml zolog_std_event_console_backend.ml \
+	zolog_std_event_file_backend.ml
 
 NON_LIB_MODULES=
 
