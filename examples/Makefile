@@ -2,7 +2,7 @@ CAMLP4=
 OCAMLC_OPTS=-package regen_event,zolog
 OCAMLOPT_OPTS=$(OCAMLC_OPTS)
 
-NON_LIB_MODULES=simple.ml simple_expanded.ml file_backend.ml
+NON_LIB_MODULES=simple.ml simple_with_metrics.ml simple_expanded.ml file_backend.ml
 
 native_bin=$(NON_LIB_MODULES:%.ml=%.native)
 

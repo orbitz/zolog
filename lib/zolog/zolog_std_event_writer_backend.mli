@@ -28,6 +28,11 @@ val default_formatter :
   ?max_level:Zolog_std_event.Log.level ->
   Formatter.t
 
+val default_with_metrics_formatter :
+  ?min_level:Zolog_std_event.Log.level ->
+  ?max_level:Zolog_std_event.Log.level ->
+  Formatter.t
+
 (* Rotator *)
 val stderr_rotator    : Rotator.t
 val writer_rotator    : Writer.t -> Rotator.t

@@ -83,7 +83,7 @@ let format_header ?(sep = ":") { Zolog_std_event.name; host; origin; time } =
     ; origin
     ]
 
-let default_formatter
+let default_with_metrics_formatter
     ?(min_level = Zolog_std_event.Log.Debug)
     ?(max_level = Zolog_std_event.Log.Critical)
     e =
@@ -99,6 +99,16 @@ let default_formatter
       let header = format_header ~sep:":" e in
       Some (level, String.concat ~sep:" " [header; line] ^ "\n")
     | None ->
+      None
+
+let default_formatter
+    ?(min_level = Zolog_std_event.Log.Debug)
+    ?(max_level = Zolog_std_event.Log.Critical)
+    e =
+  match e.Zolog_std_event.event with
+    | Zolog_std_event.Event.Log l ->
+      default_with_metrics_formatter ~min_level ~max_level e
+    | Zolog_std_event.Event.Metric _ ->
       None
 
 let writer_rotator writer =
