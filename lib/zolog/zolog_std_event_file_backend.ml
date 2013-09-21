@@ -14,10 +14,10 @@ let levels = [ Zolog_std_event.Log.Debug
 
 let sec_in_hour = 3600.0
 
-let to_filename_string t =
+let to_filename_string time =
   Core.Std.Unix.strftime
     (Core.Time_internal.to_tm_utc
-       (Time.now ()))
+       time)
     "%Y-%m-%d_%H-%M-%S"
 
 let next_rotate_time sec =
@@ -25,9 +25,9 @@ let next_rotate_time sec =
   let left_of_hour = sec_in_hour -. into_hour in
   sec +. left_of_hour
 
-let wrap_filename time filename =
-  let open Deferred.Monad_infix in
-  let now_sec = ref (Time.to_epoch (time ())) in
+let file_rotator time filename =
+  let now         = Time.to_epoch (time ()) in
+  let rotate_time = ref (next_rotate_time now) in
   let force_open () =
       Deferred.List.map
 	~f:(fun level ->
@@ -40,10 +40,10 @@ let wrap_filename time filename =
 	levels
   in
   let maybe_open () =
-    let sec = !now_sec in
+    let sec = !rotate_time in
     let now = Time.to_epoch (time ()) in
     if sec < now then begin
-      now_sec := next_rotate_time now;
+      rotate_time := next_rotate_time now;
       force_open () >>= fun writers ->
       Deferred.return (Some writers)
     end
@@ -56,7 +56,7 @@ let wrap_filename time filename =
 
 
 let create ?(time = Time.now) ~formatter filename =
-  let rotator = wrap_filename time filename in
+  let rotator = file_rotator time filename in
   Zolog_std_event_writer_backend.create
     ~formatter
     ~rotator

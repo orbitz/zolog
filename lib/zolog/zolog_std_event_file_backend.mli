@@ -13,8 +13,4 @@ val create  :
 val handler : t -> Zolog_std_event.t Zolog.Handler.t
 val destroy : t -> unit Deferred.t
 
-val default_filename :
-  dir:string ->
-  (unit -> Time.t) ->
-  Zolog_std_event.Log.level ->
-  string Deferred.t
+val default_filename : dir:string -> filename
