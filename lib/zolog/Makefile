@@ -16,6 +16,10 @@ NATIVE_TARGETS=zolog.cmxa
 
 all: native-code byte-code
 
+install: all
+	ocamlfind install zolog META $(BYTE_TARGETS) $(NATIVE_TARGETS) zolog.a *.cmx *.cmi *.mli
+
+
 test:
 
 # Dependencies

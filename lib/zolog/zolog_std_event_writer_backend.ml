@@ -77,7 +77,7 @@ let metric_formatter = function
 let format_header ?(sep = ":") { Zolog_std_event.name; host; origin; time } =
   String.concat
     ~sep:" "
-    [ Time.to_string_abs ~zone:Zone.utc time
+    [ Time.to_string_abs ~zone:Core.Zone.utc time
     ; String.concat ~sep name
     ; host
     ; origin
