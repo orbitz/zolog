@@ -1,5 +1,5 @@
 CAMLP4=
-OCAMLC_OPTS=-package regen_event,core,async,async_core
+OCAMLC_OPTS=-package regen_event,core,async
 OCAMLOPT_OPTS=$(OCAMLC_OPTS)
 
 LIB_MODULES= \

@@ -5,8 +5,8 @@ let hostname = Async_unix.Unix_syscalls.gethostname ()
 
 type std_server = Zolog_std_event.t Zolog.t
 
-type no_level =
-    (std_server -> string -> unit Deferred.t) Zolog_std_event.event
+type 'a no_level =
+    (std_server -> string -> (unit, [> `Closed ] as 'a) Deferred.Result.t) Zolog_std_event.event
 
 let debug ?(extra = []) ?(time = Time.now ()) ?(h = hostname) ~n ~o server msg =
   let event =
@@ -100,5 +100,5 @@ let time ?(extra = []) ?(time = Time.now ())  ?(h = hostname) ~n ~o server f =
       ~o
       (Zolog_std_event.Metric.Duration_sec sec)
   in
-  Zolog.publish server event >>= fun () ->
-  Deferred.return r
+  Zolog.publish server event >>=? fun () ->
+  Deferred.return (Ok r)
