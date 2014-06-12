@@ -1,6 +1,6 @@
 name="zolog"
 version="1.0.0"
 description="Core/Async log dispatcher"
-requires="core,async,async_core,regen_event"
+requires="core,async,regen_event"
 archive(byte)="zolog.cma"
 archive(native)="zolog.cmxa"

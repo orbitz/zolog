@@ -3,16 +3,16 @@ open Async.Std
 
 type std_server = Zolog_std_event.t Zolog.t
 
-type no_level =
-    (std_server -> string -> unit Deferred.t) Zolog_std_event.event
+type 'a no_level =
+    (std_server -> string -> (unit, [> `Closed ] as 'a) Deferred.Result.t) Zolog_std_event.event
 
-val debug    : no_level
-val info     : no_level
-val warning  : no_level
-val error    : no_level
-val critical : no_level
+val debug    : 'a no_level
+val info     : 'a no_level
+val warning  : 'a no_level
+val error    : 'a no_level
+val critical : 'a no_level
 
-val counter  : (std_server -> int -> unit Deferred.t) Zolog_std_event.event
+val counter  : (std_server -> int -> (unit, [> `Closed ]) Deferred.Result.t) Zolog_std_event.event
 
-val time     : (std_server -> (unit -> 'a Deferred.t) -> 'a Deferred.t) Zolog_std_event.event
+val time     : (std_server -> (unit -> 'a Deferred.t) -> ('a, [> `Closed ]) Deferred.Result.t) Zolog_std_event.event
 

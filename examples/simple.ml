@@ -2,9 +2,8 @@ open Core.Std
 open Async.Std
 
 let main () =
-  let open Deferred.Monad_infix in
-  let logger = Zolog.start () in
-
+  Zolog.start ()
+  >>= fun logger ->
   Zolog_std_event_console_backend.create
     Zolog_std_event_writer_backend.default_formatter
   >>= fun backend ->
@@ -17,34 +16,40 @@ let main () =
     ~o:"simple"
     logger
     "debug message"
-  >>= fun () ->
+  >>=? fun () ->
   (* Log a critical *)
   Zolog_event.critical
     ~n:["example"; "name"; "critical"]
     ~o:"simple"
     logger
     "critical message"
-  >>= fun () ->
+  >>=? fun () ->
+  (*
+   * We don't expect these two metrics to print anything, see
+     simple_with_metrics.ml for how to turn that on
+   *)
+
   (* Count something *)
   Zolog_event.counter
     ~n:["example"; "name"; "counter"]
     ~o:"simple"
     logger
     5
-  >>= fun () ->
+  >>=? fun () ->
   (* Time something *)
   Zolog_event.time
     ~n:["example"; "name"; "timer"]
     ~o:"simple"
     logger
     (fun () -> after (sec 2.0))
-  >>= fun () ->
+  >>=? fun () ->
   Zolog.sync logger
   >>= fun () ->
-  Zolog.stop logger;
+  Zolog.stop logger
+  >>=? fun () ->
   Zolog_std_event_console_backend.destroy backend
   >>= fun() ->
-  Deferred.return (shutdown 0)
+  Deferred.return (Ok (shutdown 0))
 
 
 let () =
