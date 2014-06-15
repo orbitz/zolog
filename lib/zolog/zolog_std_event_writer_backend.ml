@@ -83,6 +83,13 @@ let format_header ?(sep = ":") { Zolog_std_event.name; host; origin; time } =
     ; origin
     ]
 
+let format_extra { Zolog_std_event.extra } =
+  "(" ^ (String.concat
+           ~sep:", "
+           (List.map
+              ~f:(fun (k, v) -> k ^ "=" ^ v)
+              extra)) ^ ")"
+
 let default_with_metrics_formatter
     ?(min_level = Zolog_std_event.Log.Debug)
     ?(max_level = Zolog_std_event.Log.Critical)
@@ -97,7 +104,8 @@ let default_with_metrics_formatter
   match formatted with
     | Some (level, line) ->
       let header = format_header ~sep:":" e in
-      Some (level, String.concat ~sep:" " [header; line] ^ "\n")
+      let extra  = format_extra e in
+      Some (level, String.concat ~sep:" " [header; extra; line] ^ "\n")
     | None ->
       None
 
